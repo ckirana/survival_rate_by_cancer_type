@@ -1,0 +1,36 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+workbook = pd.read_excel(r'/SURVIVAL_RATE_BY_CANCER_TYPE.xlsx')
+
+x = np.array([5, 10, 15, 20])
+title = ["Prostate","Thyroid","Testis","Melanomas","Breast",
+           "Hodgkins disease","Corpus uteri, uterus","Urinary, bladder","Cervix, uteri",
+           "Larynx","Rectum","Kidney, renal pelvis","Colon","Non-Hodgkins","Oral cavity, pharynx",
+           "Ovary","Leukemia","Brain, nervous system","Multiple myeloma","Stomach",
+           "Lung and bronchus","Esophagus","Liver, bile duct","Pancreas"]
+           
+fig, axes = plt.subplots(nrows=24, ncols=1, figsize=(10,48), sharex=True)
+
+for i, ax in enumerate(axes.flatten()):
+  y = workbook.iloc[:,i]
+  e = workbook.iloc[:,i+24]
+  
+  ax.errorbar(x,
+              y,
+              e,
+              linestyle="-",
+              marker=".",
+              label=title[i])
+  fig.patch.set_visible(False)
+  ax.axis('off')
+  ax.legend(loc="upper center")
+
+  for i,j in zip(x,y):
+      label = "{:.2f}".format(j)
+      ax.annotate(label, # this is the text
+                  (i,j), # this is the point to label
+                  textcoords="offset points", # how to position the text
+                  xytext=(0,10), # distance from text to points (x,y)
+                  ha='center') # horizontal alignment can be left, right or center
